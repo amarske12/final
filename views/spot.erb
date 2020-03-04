@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h1 class="spot_header"> <%= @spot[:name] %>     
+        </div>    
+    </div>
+    
+    <hr class="my-4"> </hr>
+
+    <div class="row mt-5">
+        <div class="col-md-6 location_whereto">
+            <h3 class="sub_head"> Location Specifics: </h3> 
+                <%= @spot[:location] %>
+            <h3 class="sub_head mt-2"> Where to Fish: </h3>
+                <%= @spot[:where_to] %>
+            <h3 class="subhead mt-2"> Successful Tactics: </h3>
+                <%= @spot[:successful_tactics] %>
+        </div>
+        <div class="col-md-6 new_entry">
+            <h3 class="sub_head"> Catchin' Any? Add it to the Log! </h3>
+            <a href="/spots/<%= @spot[:id]%>/entrys/new" class ="btn btn-dark">Submit New Entry</a>
+        <hr class="my-4"> </hr>
+            <h3 class="sub_head"> Last Catch Details </h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Species</th>
+                        <th scope="col">Weight (lbs) </th>
+                        <th scope="col">Lure</th>
+                        <th scope="col">Time of Day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%= @logs[:user_id]%></td>
+                        <td><%= @logs[:date]%></td>
+                        <td><%= @logs[:species]%></td>
+                        <td><%= @logs[:weight]%></td>
+                        <td><%= @logs[:lure_used]%></td>
+                        <td><%= @logs[:time]%></td>
+                    </tr>
+                </tbody>
+            </table>  
+        </div>    
+    </div>
+</div>
