@@ -26,7 +26,7 @@ end
 
 get "/spots/:id" do
     @spot = spots_table.where(id: params[:id]).to_a[0]
-    @logs = logs_table.where(spot_id: @spot[:id])
+    @logs = logs_table.where(spot_id: @spot[:id]).to_a[0]
     @users_table = users_table
     view "spot"
 end 
@@ -49,5 +49,43 @@ get "/spots/:id/entrys/create" do
                       time: params["time"],
                       water_temp: params["water_temp"],
                       )
-    view "create_entry"
+    view "created_entry"
 end
+
+get "/users/new" do
+    view "new_user"
+end 
+
+get "/users/create" do
+    puts params
+    users_table.insert(name: params["name"],
+                       username: params["username"],
+                       password: BCrypt::Password.create(params["password"])
+                       )
+    view "created_user"
+end 
+
+get "/login/new" do
+    view "new_login"
+end
+
+post "/login/create" do
+    puts params
+    user_name = params["username"]
+    password = params["password"]
+
+    @user = users_table.where(username: user_name).to_a[0]
+
+    if @user    
+        if BCrypt::Password.new(@user[:password]) == password
+            session["user_id"] = @user[:id]
+            view "created_login"
+        else 
+            view "created_login_failure"
+        end
+    else
+        view "created_login_failure"
+    end 
+
+end
+
