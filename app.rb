@@ -18,7 +18,15 @@ spots_table = DB.from(:spots)
 logs_table = DB.from(:logs)
 users_table = DB.from(:users)
 
-get "/" do 
+before do 
+    @current_user_info = users_table.where(id: session["user_id"]).to_a[0]
+end
+
+get "/" do
+    view "home_page"
+end
+
+get "/spots" do 
     puts spots_table.all
     @spots = spots_table.all.to_a
     view "spots"
@@ -37,9 +45,11 @@ get "/spots/:id/entrys/new" do
 end
 
 get "/spots/:id/entrys/create" do
+    puts params
     @spot = spots_table.where(id: params[:id]).to_a[0]
     logs_table.insert(spot_id: params["id"],
                       user_id: session["user_id"],
+                      users_name: session["name"],
                       date: params["date"],
                       conditions: params["conditions"],
                       species: params["species"],
@@ -89,3 +99,7 @@ post "/login/create" do
 
 end
 
+get "/logout" do 
+    session["user_id"] = nil
+    view "logout"
+end 

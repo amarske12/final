@@ -21,28 +21,28 @@
             <a href="/spots/<%= @spot[:id]%>/entrys/new" class ="btn btn-dark">Submit New Entry</a>
         <hr class="my-4"> </hr>
             <h3 class="sub_head"> Last Catch Details </h3>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Species</th>
-                        <th scope="col">Weight (lbs) </th>
-                        <th scope="col">Lure</th>
-                        <th scope="col">Time of Day</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><%= @logs[:user_id]%></td>
-                        <td><%= @logs[:date]%></td>
-                        <td><%= @logs[:species]%></td>
-                        <td><%= @logs[:weight]%></td>
-                        <td><%= @logs[:lure_used]%></td>
-                        <td><%= @logs[:time]%></td>
-                    </tr>
-                </tbody>
-            </table>  
+	            <table class="table table-bordered">
+	                <thead>
+	                    <tr>
+	                        <th scope="col">Name</th>
+	                        <th scope="col">Date</th>
+	                        <th scope="col">Species</th>
+	                        <th scope="col">Weight (lbs) </th>
+	                        <th scope="col">Lure</th>
+	                        <th scope="col">Time Of Day</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr>
+	                        <td><%= @logs[:user_id]%></td>
+	                        <td><%= @logs[:date]%></td>
+                            <td><%= @logs[:species]%></td>
+                            <td><%= @logs[:weight]%></td>
+                            <td><%= @logs[:lure_used]%></td>
+                            <td><%= @logs[:time]%></td>
+	                    </tr>
+	                </tbody>
+	            </table>  
         </div>    
     </div>
 </div>

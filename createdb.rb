@@ -16,7 +16,7 @@ DB.create_table! :logs do
     primary_key :id
     foreign_key :spot_id
     foreign_key :user_id
-    String :name            ##remove once login capability exists
+    foreign_key :users_name
     String :date
     String :conditions 
     String :species
