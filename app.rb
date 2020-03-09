@@ -18,6 +18,10 @@ spots_table = DB.from(:spots)
 logs_table = DB.from(:logs)
 users_table = DB.from(:users)
 
+account_sid = "AC822afc57efdaa34a762554787f64dce3"
+auth_token = "c5119c671f7b204482d78a9d7558dee5"
+client = Twilio::REST::Client.new(account_sid, auth_token)
+
 before do 
     @current_user_info = users_table.where(id: session["user_id"]).to_a[0]
 end
@@ -27,25 +31,33 @@ get "/" do
 end
 
 get "/spots" do 
-    puts spots_table.all
+    pp spots_table.all
     @spots = spots_table.all.to_a
     view "spots"
 end
 
 get "/spots/:id" do
+    puts "params: #{params}"
+    
     @spot = spots_table.where(id: params[:id]).to_a[0]
-    @logs = logs_table.where(spot_id: @spot[:id]).to_a[0]
+    pp @spot
+    
+    @logs = logs_table.where(spot_id: @spot[:id]).to_a
+    @max_date = logs_table.where(spot_id: @spot[:id]).max(:date)
+    @last_catch = logs_table.where(spot_id: @spot[:id], date: @max_date).to_a[0]
+    pp @last_catch
     @users_table = users_table
     view "spot"
 end 
 
 get "/spots/:id/entrys/new" do 
+    puts "params: #{params}"
     @spot = spots_table.where(id: params[:id]).to_a[0]
     view "new_entry"
 end
 
 get "/spots/:id/entrys/create" do
-    puts params
+    puts "params: #{params}"
     @spot = spots_table.where(id: params[:id]).to_a[0]
     logs_table.insert(spot_id: params["id"],
                       user_id: session["user_id"],
@@ -67,7 +79,7 @@ get "/users/new" do
 end 
 
 get "/users/create" do
-    puts params
+    puts "params: #{params}"
     users_table.insert(name: params["name"],
                        username: params["username"],
                        password: BCrypt::Password.create(params["password"])
@@ -80,7 +92,7 @@ get "/login/new" do
 end
 
 post "/login/create" do
-    puts params
+    puts "params: #{params}"
     user_name = params["username"]
     password = params["password"]
 
@@ -89,6 +101,11 @@ post "/login/create" do
     if @user    
         if BCrypt::Password.new(@user[:password]) == password
             session["user_id"] = @user[:id]
+            client.messages.create(
+                from: "+12056515562", 
+                to: "+17087053788",
+                body: "Hey KIEI 451!"
+                )
             view "created_login"
         else 
             view "created_login_failure"

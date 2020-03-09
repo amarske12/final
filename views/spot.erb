@@ -27,19 +27,19 @@
 	                        <th scope="col">Name</th>
 	                        <th scope="col">Date</th>
 	                        <th scope="col">Species</th>
-	                        <th scope="col">Weight (lbs) </th>
+	                        <th scope="col">Weight (lbs)</th>
 	                        <th scope="col">Lure</th>
 	                        <th scope="col">Time Of Day</th>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    <tr>
-	                        <td><%= @logs[:user_id]%></td>
-	                        <td><%= @logs[:date]%></td>
-                            <td><%= @logs[:species]%></td>
-                            <td><%= @logs[:weight]%></td>
-                            <td><%= @logs[:lure_used]%></td>
-                            <td><%= @logs[:time]%></td>
+	                        <td><%= @last_catch[:name]%></td>
+	                        <td><%= @last_catch[:date]%></td>
+                            <td><%= @last_catch[:species]%></td>
+                            <td><%= @last_catch[:weight]%></td>
+                            <td><%= @last_catch[:lure_used]%></td>
+                            <td><%= @last_catch[:time]%></td>
 	                    </tr>
 	                </tbody>
 	            </table>  
