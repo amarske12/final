@@ -40,12 +40,10 @@ get "/spots/:id" do
     puts "params: #{params}"
     
     @spot = spots_table.where(id: params[:id]).to_a[0]
-    pp @spot
-    
-    @logs = logs_table.where(spot_id: @spot[:id]).to_a
+    pp @spot  
+    @logs = logs_table.where(spot_id: @spot[:id])
     @max_date = logs_table.where(spot_id: @spot[:id]).max(:date)
-    @last_catch = logs_table.where(spot_id: @spot[:id], date: @max_date).to_a[0]
-    pp @last_catch
+    @last_catch = logs_table.where(spot_id: @spot[:id], date: @max_date).to_a
     @users_table = users_table
     view "spot"
 end 
@@ -61,7 +59,7 @@ get "/spots/:id/entrys/create" do
     @spot = spots_table.where(id: params[:id]).to_a[0]
     logs_table.insert(spot_id: params["id"],
                       user_id: session["user_id"],
-                      users_name: session["name"],
+                      users_name: params["users_name"],
                       date: params["date"],
                       conditions: params["conditions"],
                       species: params["species"],
@@ -96,27 +94,21 @@ post "/login/create" do
     user_name = params["username"]
     password = params["password"]
 
-    @user = users_table.where(username: user_name).to_a[0]
+    user = users_table.where(username: user_name).to_a[0]
 
-    if @user    
-        if BCrypt::Password.new(@user[:password]) == password
-            session["user_id"] = @user[:id]
-            client.messages.create(
-                from: "+12056515562", 
-                to: "+17087053788",
-                body: "Hey KIEI 451!"
-                )
-            view "created_login"
-        else 
-            view "created_login_failure"
-        end
-    else
+    if user && BCrypt::Password.new(user[:password]) == password
+        session["user_id"] = user[:id]
+        session["users_name"] = user[:name]
+        @current_user_info = user
+        view "created_login"
+    else 
         view "created_login_failure"
-    end 
+    end
 
 end
 
 get "/logout" do 
     session["user_id"] = nil
+    @current_user_info = nil
     view "logout"
 end 

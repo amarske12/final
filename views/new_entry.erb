@@ -9,12 +9,12 @@
             <form action="/spots/<%= @spot[:id]%>/entrys/create">
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="user_id">Name</label>
-                        <input class="form-control" name="user_id" type="text" placeholder= <%= @current_user_info[:name] %> disabled>
+                        <label for="users_name">Name</label>
+                        <input type="text" readonly class="form-control" name="users_name" value= <%= @current_user_info[:name] %>>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="date">Date</label>
-                        <input type="text" class="form-control" name="date">
+                        <input type="text" class="form-control" name="date" placeholder= "M/D/YYYY">
                     </div>
                     <div class="form-group col-md-5">
                         <label for="conditions">Conditions</label>
