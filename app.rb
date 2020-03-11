@@ -4,7 +4,8 @@ require "sinatra/reloader" if development?                                      
 require "sequel"                                                                      #
 require "logger"                                                                      #
 require "twilio-ruby"                                                                 #
-require "bcrypt"                                                                      #
+require "bcrypt"
+require "geocoder"                                                                      #
 connection_string = ENV['DATABASE_URL'] || "sqlite://#{Dir.pwd}/development.sqlite3"  #
 DB ||= Sequel.connect(connection_string)                                              #
 DB.loggers << Logger.new($stdout) unless DB.loggers.size > 0                          #
@@ -41,9 +42,14 @@ get "/spots/:id" do
     
     @spot = spots_table.where(id: params[:id]).to_a[0]
     pp @spot  
+    
+    @lat = @spot[:latitude]
+    @long = @spot[:longitude]
+    @lat_long = "#{@lat},#{@long}"
+    
     @logs = logs_table.where(spot_id: @spot[:id])
-    @max_date = logs_table.where(spot_id: @spot[:id]).max(:date)
-    @last_catch = logs_table.where(spot_id: @spot[:id], date: @max_date).to_a
+    @max_weight = logs_table.where(spot_id: @spot[:id]).max(:weight)
+    @last_catch = logs_table.where(spot_id: @spot[:id], weight: @max_weight).to_a
     @users_table = users_table
     view "spot"
 end 
@@ -90,15 +96,12 @@ get "/login/new" do
 end
 
 post "/login/create" do
-    puts "params: #{params}"
     user_name = params["username"]
     password = params["password"]
-
     user = users_table.where(username: user_name).to_a[0]
-
+    puts BCrypt::Password.new(user[:password])
     if user && BCrypt::Password.new(user[:password]) == password
         session["user_id"] = user[:id]
-        session["users_name"] = user[:name]
         @current_user_info = user
         view "created_login"
     else 
