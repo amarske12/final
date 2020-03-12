@@ -16,9 +16,10 @@
     text-align: center;
     font-size: 40px;
 }
-.logout{
+
+.incorrect{
     text-align: center;
 }
-.incorrect{
+.return_page{
     text-align: center;
 }
