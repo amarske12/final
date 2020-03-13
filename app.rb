@@ -83,10 +83,11 @@ get "/users/new" do
 end 
 
 get "/users/create" do
-    puts "params: #{params}"
+    puts params
+    hash = BCrypt::Password.create(params["password"])
     users_table.insert(name: params["name"],
                        username: params["username"],
-                       password: BCrypt::Password.create(params["password"])
+                       password: hash
                        )
     view "created_user"
 end 
